@@ -1,6 +1,8 @@
 # Flickr Uploader
 
-This gem uploads photos in a folder to a Flickr photoset.
+This gem uploads photos in a folder to a [Flickr](http://www.flickr.com) photoset.
+
+I created it to easily backup my entire photo collection to Flickr.
 
 ## Configuration
 
