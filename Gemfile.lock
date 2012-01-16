@@ -15,6 +15,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     mime-types (1.17.2)
+    rb-readline (0.4.2)
     thor (0.14.6)
     xml-magic (0.1.1)
 
@@ -24,4 +25,5 @@ PLATFORMS
 DEPENDENCIES
   flickr_fu!
   flickr_uploader!
+  rb-readline
   thor
