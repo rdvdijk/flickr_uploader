@@ -1,0 +1,27 @@
+GIT
+  remote: https://github.com/rdvdijk/flickr_fu
+  revision: a93b6c97bfdaee95ae031fe5bd14cf43c03bcaf3
+  specs:
+    flickr_fu (0.3.0)
+      mime-types (> 0.0.0)
+      xml-magic (> 0.0.0)
+
+PATH
+  remote: .
+  specs:
+    flickr_uploader (0.0.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    mime-types (1.17.2)
+    thor (0.14.6)
+    xml-magic (0.1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  flickr_fu!
+  flickr_uploader!
+  thor
