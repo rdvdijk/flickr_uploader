@@ -2,10 +2,11 @@ require 'flickr_fu'
 
 module FlickrUploader
   class Uploader
+    include Configuration
 
     def initialize(path)
       @path = path
-      initialize_flickr
+      initialize_uploader
     end
 
     # Loop over all JPG files and upload them to a set.
@@ -34,10 +35,8 @@ module FlickrUploader
 
     private
 
-    def initialize_flickr
-      configuration_path = File.join(Dir.home, ".flickr-uploader/flickr.yml")
-      raise "No configuration found (#{configuration_path})" unless File.exists?(configuration_path)
-      @flickr = Flickr.new(configuration_path)
+    def initialize_uploader
+      initialize_flickr
       @uploader = Flickr::Uploader.new(@flickr)
 
       # Find set, if it exists. This also triggers initial authentication.. (which is needed!)

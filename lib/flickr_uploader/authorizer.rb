@@ -3,20 +3,22 @@ require 'readline'
 
 module FlickrUploader
   class Authorizer
-    def self.authorize
-      flickr = Flickr.new('flickr.yml')
+    extend Configuration
 
-      puts "Visit the following url, then click <enter> once you have authorized:"
+    def self.authorize
+      initialize_flickr
+
+      puts "Visit the following url, then press <enter> once you have authorized:"
 
       # request write permissions
       puts
-      puts flickr.auth.url(:write)
+      puts @flickr.auth.url(:write)
       puts
 
       # wait for input .. (gets doesn't work..?)
-      line = Readline.readline("..")
+      line = Readline.readline("press <enter> when done ...")
 
-      flickr.auth.cache_token
+      @flickr.auth.cache_token
     end
   end
 end
