@@ -14,7 +14,9 @@ Example configuration file:
     token_cache: "/Users/jane/.flickr-uploader/token_cache.yml"
 
 Create your own [application on Flickr](http://www.flickr.com/services/apps), and use the `key`
-and `secret` of that application in the configuration above.
+and `secret` of that application in the configuration above. Make sure that the `token_cache` value
+points to a different file in the same folder (it is a file the [flickr-fu](https://github.com/commonthread/flickr_fu)
+library uses to cache the authentication tokens).
 
 ## Authorization
 
@@ -23,6 +25,8 @@ You need to authorize the application once using:
     $ flickr-uploader authorize
 
 Visit the URL shown on your screen and follow the instructions on Flickr.
+
+(I might add OAuth support in the future..)
 
 ## Uploading
 
