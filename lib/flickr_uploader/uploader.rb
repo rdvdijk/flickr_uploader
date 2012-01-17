@@ -1,10 +1,12 @@
 require 'flickr_fu'
+require 'logger'
 
 module FlickrUploader
   class Uploader
     include Configuration
 
     def initialize(path)
+      @log = Logger.new(STDOUT)
       @path = path
       initialize_uploader
     end
@@ -13,22 +15,20 @@ module FlickrUploader
     def upload!
       Dir.chdir(@path) do
         Dir.glob("*.jpg") do |filename|
-          print "Uploading: #{filename} .. "
+          @log.info "Uploading: #{filename} .. "
 
-          if found = photo_uploaded?(filename) and found.empty?
+          unless photo_uploaded?(filename)
             # upload photo
             full_photo_path = File.join(@path, filename)
             result = @uploader.upload(full_photo_path)
             photo_id = result.photoid.to_s
-            print "Success! (photo_id = #{photo_id}) .. "
+            @log.info "Success! (photo_id = #{photo_id}) .. "
 
             # add photo to set
             add_to_set(set_name, photo_id)
           else
-            print "Skipping, already uploaded! (photo_id = #{found.map(&:id).join(' ')})"
+            @log.info "Skipping, already uploaded!" # TODO: (photo_id = #{found.map(&:id).join(' ')})"
           end
-
-          puts
         end
       end
     end
@@ -53,7 +53,7 @@ module FlickrUploader
     end
 
     def create_set(set_name, photo_id)
-      puts "Creating new set '#{set_name}'"
+      @log.info "Creating new set '#{set_name}'"
       @photosets.create(set_name, photo_id)
       find_set(set_name)
     end
@@ -62,7 +62,7 @@ module FlickrUploader
       if !@set
         @set = create_set(set_name, photo_id)
       else
-        print "Adding to existing set '#{set_name}'"
+        @log.info "Adding to existing set '#{set_name}'"
         @set.add_photo(photo_id)
       end
     end
@@ -71,7 +71,7 @@ module FlickrUploader
       return false unless @set
       @photos ||= @set.get_photos
       base_filename = File.basename(filename, File.extname(filename))
-      @photos.select { |photo| photo.title == base_filename }
+      @photos.select { |photo| photo.title == base_filename }.any?
     end
 
   end
