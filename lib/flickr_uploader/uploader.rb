@@ -27,7 +27,7 @@ module FlickrUploader
             # add photo to set
             add_to_set(set_name, photo_id)
           else
-            @log.info "Skipping, already uploaded!" # TODO: (photo_id = #{found.map(&:id).join(' ')})"
+            @log.info "Skipping, already uploaded! #(photo_id = #{photos_by_name(filename).map(&:photoid).join(' ')})"
           end
         end
       end
@@ -69,10 +69,14 @@ module FlickrUploader
 
     def photo_uploaded?(filename)
       return false unless @set
-      @photos ||= @set.get_photos
-      base_filename = File.basename(filename, File.extname(filename))
-      @photos.select { |photo| photo.title == base_filename }.any?
+      photos_by_name(filename).any?
     end
 
+    def photos_by_name(filename)
+      return [] unless @set
+      @photos ||= @set.get_photos
+      base_filename = File.basename(filename, File.extname(filename))
+      @photos.select { |photo| photo.title == base_filename }
+    end
   end
 end

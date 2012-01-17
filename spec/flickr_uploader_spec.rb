@@ -3,25 +3,27 @@ require 'spec_helper'
 describe FlickrUploader::Uploader do
 
   before do
+    # collaborators:
     @uploader = double
     Flickr::Uploader.stub(:new).and_return(@uploader)
-
-    @photo1 = create_photo(42, "photo001")
-    @photo2 = create_photo(43, "photo002")
-    @photo3 = create_photo(44, "photo003")
 
     @photosets = double
     Flickr::Photosets.stub(:new).and_return(@photosets)
 
     @photoset = double
     Flickr::Photosets::Photoset.stub(:new).and_return(@photoset)
+
+    # photos being uploaded:
+    @photo1 = create_photo(42, "photo001")
+    @photo2 = create_photo(43, "photo002")
+    @photo3 = create_photo(44, "photo003")
   end
 
   let(:folder_path) { File.join(File.dirname(__FILE__), "example_photoset") }
 
   subject do
     uploader = FlickrUploader::Uploader.new(folder_path)
-    uploader.instance_variable_get(:@log).level = Logger::WARN
+    uploader.instance_variable_get(:@log).level = Logger::WARN # is there a better way to do this?
     uploader
   end
 
@@ -84,19 +86,26 @@ describe FlickrUploader::Uploader do
   context "add photo to existing set" do
 
     before do
+      @photosets.stub(:get_list).and_return([@photoset])
       @photoset.stub(:title).and_return("example_photoset")
       @photoset.stub(:get_photos).and_return([@photo1])
-      @photosets.stub(:get_list).and_return([@photoset])
     end
 
     it "should upload a photo not in the set yet" do
       # stubs
-      @uploader.stub(:upload).and_return(@photo2)
-      @photosets.stub(:create)
       @photoset.stub(:add_photo)
 
       # expectation
       @uploader.should_receive(:upload).with(File.join(folder_path, "photo002.jpg"))
+
+      subject.upload!
+    end
+
+    it "should not upload a photo already in the set" do
+      @photoset.stub(:add_photo)
+
+      # expectation
+      @uploader.should_not_receive(:upload).with(File.join(folder_path, "photo001.jpg"))
 
       subject.upload!
     end

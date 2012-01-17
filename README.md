@@ -28,8 +28,6 @@ You need to authorize the application once using:
 
 Visit the URL shown on your screen and follow the instructions on Flickr.
 
-(I might add OAuth support in the future..)
-
 ## Uploading
 
 Uploading should now be easy:

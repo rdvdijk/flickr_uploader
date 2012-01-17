@@ -16,6 +16,8 @@ module FlickrUploader
       end
     end
 
+    private
+
     def configuration_path
       @configuration_path ||= File.join(Dir.home, ".flickr-uploader/flickr.yml")
     end

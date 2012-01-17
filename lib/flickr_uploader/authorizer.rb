@@ -15,7 +15,7 @@ module FlickrUploader
       puts @flickr.auth.url(:write)
       puts
 
-      # wait for input .. (gets doesn't work..?)
+      # wait for input .. ('gets' doesn't work..?)
       line = Readline.readline("press <enter> when done ...")
 
       @flickr.auth.cache_token
