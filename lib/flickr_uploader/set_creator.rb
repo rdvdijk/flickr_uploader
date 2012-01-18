@@ -8,6 +8,7 @@ module FlickrUploader
       initialize_uploader
     end
 
+    # Loop over all JPG files and upload them to a set.
     def upload_files(file_paths)
       file_paths.each do |file_path|
         filename = File.basename(file_path)

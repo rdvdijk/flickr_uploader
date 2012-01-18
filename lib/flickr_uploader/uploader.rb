@@ -11,7 +11,7 @@ module FlickrUploader
       @path = path
     end
 
-    # Loop over all JPG files and upload them to a set.
+    # create photosets of 500 or less photos
     def upload!
       if photo_paths.size > PHOTOSET_LIMIT
         photo_paths.each_slice(PHOTOSET_LIMIT).with_index do |photo_paths_subset, index|
