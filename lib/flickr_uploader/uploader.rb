@@ -3,80 +3,45 @@ require 'logger'
 
 module FlickrUploader
   class Uploader
-    include Configuration
+
+    PHOTOSET_LIMIT = 500 # Flickr limit, not mine
 
     def initialize(path)
-      @log = Logger.new(STDOUT)
+      @logger = Logger.new(STDOUT)
       @path = path
-      initialize_uploader
     end
 
     # Loop over all JPG files and upload them to a set.
     def upload!
-      Dir.chdir(@path) do
-        Dir.glob("*.jpg") do |filename|
-          @log.info "Uploading: #{filename} .. "
-
-          unless photo_uploaded?(filename)
-            # upload photo
-            full_photo_path = File.join(@path, filename)
-            result = @uploader.upload(full_photo_path)
-            photo_id = result.photoid.to_s
-            @log.info "Success! (photo_id = #{photo_id}) .. "
-
-            # add photo to set
-            add_to_set(set_name, photo_id)
-          else
-            @log.info "Skipping, already uploaded! #(photo_id = #{photos_by_name(filename).map(&:photoid).join(' ')})"
-          end
+      if photo_paths.size > PHOTOSET_LIMIT
+        photo_paths.each_slice(PHOTOSET_LIMIT).with_index do |photo_paths_subset, index|
+          create_set(base_set_name + " (part #{index+1})", photo_paths_subset)
         end
+      else
+        create_set(base_set_name, photo_paths)
       end
     end
 
     private
 
-    def initialize_uploader
-      initialize_flickr
-      @uploader = Flickr::Uploader.new(@flickr)
-
-      # Find set, if it exists. This also triggers initial authentication.. (which is needed!)
-      @set = find_set(set_name)
+    def create_set(name, photo_paths)
+      set_creator = SetCreator.new(name)
+      set_creator.upload_files(photo_paths)
     end
 
-    def set_name
-      @set_name ||= File.basename(@path)
+    def photo_paths
+      @photo_paths ||= filenames.map { |f| File.join(@path, f) }
     end
 
-    def find_set(name)
-      @photosets = Flickr::Photosets.new(@flickr)
-      @photosets.get_list.find { |set| set.title == name }
-    end
-
-    def create_set(set_name, photo_id)
-      @log.info "Creating new set '#{set_name}'"
-      @photosets.create(set_name, photo_id)
-      find_set(set_name)
-    end
-
-    def add_to_set(set_name, photo_id)
-      if !@set
-        @set = create_set(set_name, photo_id)
-      else
-        @log.info "Adding to existing set '#{set_name}'"
-        @set.add_photo(photo_id)
+    def filenames
+      Dir.chdir(@path) do
+        Dir.glob("*.jpg")
       end
     end
 
-    def photo_uploaded?(filename)
-      return false unless @set
-      photos_by_name(filename).any?
+    def base_set_name
+      @base_set_name ||= File.basename(@path)
     end
 
-    def photos_by_name(filename)
-      return [] unless @set
-      @photos ||= @set.get_photos
-      base_filename = File.basename(filename, File.extname(filename))
-      @photos.select { |photo| photo.title == base_filename }
-    end
   end
 end
