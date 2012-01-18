@@ -37,6 +37,9 @@ Uploading should now be easy:
 This will upload all the photos in that folder to a new photoset with the name of the folder (in
 this case: `folder`).
 
+If there are more than 500 photos in the folder, separate photosets are created on Flickr, to
+accomodate Flickr's 500 photos per photoset limit.
+
 ## License
 
 Released under the MIT License.
