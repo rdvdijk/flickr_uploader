@@ -1,5 +1,3 @@
-config.yml
-token_cache.yml
-flickr.yml
 tmp
 coverage
+pkg
