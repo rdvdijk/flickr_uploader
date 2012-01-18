@@ -40,6 +40,13 @@ this case: `folder`).
 If there are more than 500 photos in the folder, separate photosets are created on Flickr, to
 accomodate Flickr's 500 photos per photoset limit.
 
+## Improvements
+
+Feel free to fork this project on [GitHub](http://github.com/rdvdijk/flickr_uploader) to add any
+improvements.
+
+(Something that's coming up is logging the speed of the upload.)
+
 ## License
 
 Released under the MIT License.
