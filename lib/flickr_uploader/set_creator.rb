@@ -1,12 +1,10 @@
+require 'progressbar'
+
 module FlickrUploader
   class SetCreator
     include Configuration
 
     def initialize(set_name)
-      @logger = Logger.new(STDOUT)
-      @logger.formatter = proc do |severity, datetime, progname, msg|
-        "[#{severity}][#{datetime.strftime('%H:%M:%S')}] #{msg}\n"
-      end
       @set_name = set_name
       initialize_uploader
     end
@@ -14,16 +12,22 @@ module FlickrUploader
     # Loop over all JPG files and upload them to a set.
     def upload_files(file_paths)
       logger.info "Starting upload of #{file_paths.size} photos to photoset '#{@set_name}'."
+      pbar = ProgressBar.new("Upload", file_paths.size)
+      pbar.bar_mark = '='
+
       file_paths.each do |file_path|
         filename = File.basename(file_path)
-        logger.info "Uploading: #{filename} .. "
+        logger.debug "Uploading: #{filename} .. "
 
         unless photo_uploaded?(filename)
           upload_file(file_path)
         else
           logger.info "Skipping, already uploaded! #(photo_id = #{photos_by_name(filename).map(&:photoid).join(' ')})"
         end
+        pbar.inc
       end
+
+      pbar.finish
       logger.info "Done uploading #{file_paths.size} photos to photoset '#{@set_name}'."
     end
 
@@ -35,7 +39,7 @@ module FlickrUploader
         result = @uploader.upload(file_path)
 
         photo_id = result.photoid.to_s
-        logger.info "Success! (photo_id = #{photo_id}) .. "
+        logger.debug "Success! (photo_id = #{photo_id}) .. "
 
         # add photo to set
         add_to_set(@set_name, photo_id)
@@ -46,7 +50,7 @@ module FlickrUploader
       start = Time.now.to_f
       yield
       finish = Time.now.to_f
-      logger.info "Speed: #{((size / (finish - start)) / 1024.0).round(1)}KiB/s"
+      logger.debug "Speed: #{((size / (finish - start)) / 1024.0).round(1)}KiB/s"
     end
 
     def initialize_uploader
@@ -63,7 +67,7 @@ module FlickrUploader
     end
 
     def create_set(set_name, photo_id)
-      logger.info "Creating new set '#{set_name}'"
+      logger.debug "Creating new set '#{set_name}'"
       @photosets.create(set_name, photo_id)
       find_set(set_name)
     end
@@ -72,7 +76,7 @@ module FlickrUploader
       if !@set
         @set = create_set(set_name, photo_id)
       else
-        logger.info "Adding to existing set '#{set_name}'"
+        logger.debug "Adding to existing set '#{set_name}'"
         @set.add_photo(photo_id)
       end
     end
@@ -90,7 +94,16 @@ module FlickrUploader
     end
 
     def logger
-      @logger
+      @logger ||= create_logger
+    end
+
+    def create_logger
+      logger = Logger.new(STDOUT)
+      logger.level == Logger::INFO
+      logger.formatter = proc do |severity, datetime, progname, msg|
+        "[#{severity}][#{datetime.strftime('%H:%M:%S')}] #{msg}\n"
+      end
+      logger
     end
 
   end

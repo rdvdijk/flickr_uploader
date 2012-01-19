@@ -22,6 +22,7 @@ describe FlickrUploader::SetCreator do
     FlickrUploader::SetCreator.any_instance.stub(:logger).and_return(Logger.new(@log_stream))
 
     File.stub(:size).and_return(1024)
+    ProgressBar.stub(:new).and_return(double("bar", :bar_mark= => nil, :inc => nil, :finish => nil))
   end
 
   let(:folder_path) { File.join("/some/path", "example_photoset") }

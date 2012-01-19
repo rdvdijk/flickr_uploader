@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "flickr_fu"
   s.add_runtime_dependency "thor"
   s.add_runtime_dependency "rb-readline"
+  s.add_runtime_dependency "progressbar"
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "rake"
