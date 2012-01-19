@@ -4,6 +4,9 @@ module FlickrUploader
 
     def initialize(set_name)
       @logger = Logger.new(STDOUT)
+      @logger.formatter = proc do |severity, datetime, progname, msg|
+        "[#{severity}][#{datetime.strftime('%H:%M:%S')}] #{msg}\n"
+      end
       @set_name = set_name
       initialize_uploader
     end
@@ -20,6 +23,7 @@ module FlickrUploader
           logger.info "Skipping, already uploaded! #(photo_id = #{photos_by_name(filename).map(&:photoid).join(' ')})"
         end
       end
+      logger.info "Done uploading #{file_paths.size} photos to photoset '#{@set_name}'."
     end
 
     private
