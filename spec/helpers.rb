@@ -2,10 +2,11 @@ module Helpers
 
   def create_photo(id, title)
     photo = double
-    photo.stub(:photoid).and_return(id)
+    photo.stub(:id).and_return(id)
     photo.stub(:title).and_return(title)
     if @uploader
-      @uploader.stub(:upload).with(File.join(folder_path, "#{title}.jpg")).and_return(photo)
+      xml = double("xml", :photoid => id)
+      @uploader.stub(:upload).with(File.join(folder_path, "#{title}.jpg")).and_return(xml)
     end
     photo
   end

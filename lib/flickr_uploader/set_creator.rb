@@ -22,7 +22,7 @@ module FlickrUploader
         unless photo_uploaded?(filename)
           upload_file(file_path)
         else
-          logger.info "Skipping, already uploaded! #(photo_id = #{photos_by_name(filename).map(&:photoid).join(' ')})"
+          logger.info "Skipping, already uploaded! #(photo_id = #{photos_by_name(filename).map(&:id).join(' ')})"
         end
         pbar.inc
       end
@@ -99,7 +99,7 @@ module FlickrUploader
 
     def create_logger
       logger = Logger.new(STDOUT)
-      logger.level == Logger::INFO
+      logger.level = Logger::INFO
       logger.formatter = proc do |severity, datetime, progname, msg|
         "[#{severity}][#{datetime.strftime('%H:%M:%S')}] #{msg}\n"
       end
