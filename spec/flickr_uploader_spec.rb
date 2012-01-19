@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'helpers'
+require 'tmpdir'
 
 RSpec.configure do |c|
   c.include Helpers
@@ -7,13 +8,17 @@ end
 
 describe FlickrUploader::Uploader do
 
+  let(:temp_dir) { Dir.mktmpdir }
+  let(:folder_path) { File.join(temp_dir, "example_photoset") }
+
   before do
     # collaborators:
     @set_creator = double
     FlickrUploader::SetCreator.stub(:new).and_return(@set_creator)
-  end
 
-  let(:folder_path) { File.join(File.dirname(__FILE__), "example_photoset") }
+    # Fake a source folder for upload:
+    Dir.mkdir(folder_path)
+  end
 
   subject do
     FlickrUploader::Uploader.new(folder_path)

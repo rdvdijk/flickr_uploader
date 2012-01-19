@@ -22,7 +22,7 @@ describe FlickrUploader::SetCreator do
     FlickrUploader::SetCreator.any_instance.stub(:logger).and_return(Logger.new(@log_stream))
   end
 
-  let(:folder_path) { File.join(File.dirname(__FILE__), "example_photoset") }
+  let(:folder_path) { File.join("/some/path", "example_photoset") }
 
   subject do
     FlickrUploader::SetCreator.new("example_photoset")
