@@ -94,4 +94,24 @@ describe FlickrUploader::Uploader do
     end
   end
 
+  context "uploading files in order" do
+    let (:filenames) { filename_list(3).reverse }
+    let (:file_paths) { file_paths_list(filenames) }
+
+    before do
+      fake_finding_files(filenames)
+    end
+
+    it "it should upload the files in alphabetic order" do
+      # stub
+      @set_creator.stub(:upload_files)
+
+      # expectation
+      @set_creator.should_receive(:upload_files).with(file_paths.sort)
+
+      subject.upload!
+    end
+
+  end
+
 end

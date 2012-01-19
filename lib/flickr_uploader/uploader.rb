@@ -35,7 +35,7 @@ module FlickrUploader
 
     def filenames
       Dir.chdir(@path) do
-        Dir.glob("*.jpg")
+        Dir.glob("*.jpg").sort
       end
     end
 
