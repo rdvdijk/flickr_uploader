@@ -12,8 +12,7 @@ module FlickrUploader
     # Loop over all JPG files and upload them to a set.
     def upload_files(file_paths)
       logger.info "Starting upload of #{file_paths.size} photos to photoset '#{@set_name}'."
-      pbar = ProgressBar.new("Upload", file_paths.size)
-      pbar.bar_mark = '='
+      progressbar = progressbar(file_paths.size)
 
       file_paths.each do |file_path|
         filename = File.basename(file_path)
@@ -22,12 +21,12 @@ module FlickrUploader
         unless photo_uploaded?(filename)
           upload_file(file_path)
         else
-          logger.info "Skipping, already uploaded! #(photo_id = #{photos_by_name(filename).map(&:id).join(' ')})"
+          logger.info "Skipping '#{filename}', already uploaded! #(photo_id = #{photos_by_name(filename).map(&:id).join(' ')})"
         end
-        pbar.inc
+        progressbar.inc
       end
 
-      pbar.finish
+      progressbar.finish
       logger.info "Done uploading #{file_paths.size} photos to photoset '#{@set_name}'."
     end
 
@@ -104,6 +103,13 @@ module FlickrUploader
         "[#{severity}][#{datetime.strftime('%H:%M:%S')}] #{msg}\n"
       end
       logger
+    end
+
+    def progressbar(size)
+      progressbar = ProgressBar.new("Upload", size)
+      progressbar.format_arguments = [:count, :percentage, :bar, :stat]
+      progressbar.bar_mark = '='
+      progressbar
     end
 
   end
