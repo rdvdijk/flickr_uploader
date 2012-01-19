@@ -13,6 +13,7 @@ module FlickrUploader
 
     # Loop over all JPG files and upload them to a set.
     def upload_files(file_paths)
+      logger.info "Starting upload of #{file_paths.size} photos to photoset '#{@set_name}'."
       file_paths.each do |file_path|
         filename = File.basename(file_path)
         logger.info "Uploading: #{filename} .. "
