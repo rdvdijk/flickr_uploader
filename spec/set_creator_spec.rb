@@ -20,6 +20,8 @@ describe FlickrUploader::SetCreator do
 
     @log_stream = StringIO.new
     FlickrUploader::SetCreator.any_instance.stub(:logger).and_return(Logger.new(@log_stream))
+
+    File.stub(:size).and_return(1024)
   end
 
   let(:folder_path) { File.join("/some/path", "example_photoset") }

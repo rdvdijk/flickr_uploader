@@ -15,14 +15,7 @@ module FlickrUploader
         logger.info "Uploading: #{filename} .. "
 
         unless photo_uploaded?(filename)
-          # upload photo
-          result = @uploader.upload(file_path)
-
-          photo_id = result.photoid.to_s
-          logger.info "Success! (photo_id = #{photo_id}) .. "
-
-          # add photo to set
-          add_to_set(@set_name, photo_id)
+          upload_file(file_path)
         else
           logger.info "Skipping, already uploaded! #(photo_id = #{photos_by_name(filename).map(&:photoid).join(' ')})"
         end
@@ -30,6 +23,26 @@ module FlickrUploader
     end
 
     private
+
+    def upload_file(file_path)
+      # upload photo
+      log_speed(File.size(file_path)) do
+        result = @uploader.upload(file_path)
+
+        photo_id = result.photoid.to_s
+        logger.info "Success! (photo_id = #{photo_id}) .. "
+
+        # add photo to set
+        add_to_set(@set_name, photo_id)
+      end
+    end
+
+    def log_speed(size)
+      start = Time.now.to_f
+      yield
+      finish = Time.now.to_f
+      logger.info "Speed: #{((size / (finish - start)) / 1024.0).round(1)}KiB/s"
+    end
 
     def initialize_uploader
       initialize_flickr
