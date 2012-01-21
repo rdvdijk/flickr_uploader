@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    flickr_uploader (0.0.3)
+    flickr_uploader (0.0.4)
       flickr_fu
       progressbar
       rb-readline
