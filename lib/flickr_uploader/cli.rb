@@ -5,7 +5,7 @@ module FlickrUploader
 
     desc "authorize", "Authorize this app with Flickr."
     def authorize
-      Authorizer.authorize
+      Authorizer.authorize!
     end
 
     desc "upload [PATH]", "Upload a single folder to Flickr."
