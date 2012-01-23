@@ -3,7 +3,7 @@ class ProgressBar
 
   def fmt_count
     @title = "#{@current}/#{@total} [#{speed}kb/s]"
-    @title_width = 20
+    @title_width = 24
     fmt_title
   end
 
