@@ -7,7 +7,6 @@ module FlickrUploader
     PHOTOSET_LIMIT = 500 # Flickr limit, not mine
 
     def initialize(path)
-      @logger = Logger.new(STDOUT)
       @path = path
     end
 

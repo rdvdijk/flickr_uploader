@@ -6,11 +6,22 @@ module FlickrUploader
     end
 
     def upload!
-      Dir.chdir(@parent_dir) do
-        Dir.glob("*/") do |subfolder|
-          Uploader.new(File.join(@parent_dir, subfolder)).upload!
-        end
+      subfolders.sort.each do |subfolder|
+        logger.info("Uploading subfolder '#{subfolder}'")
+        Uploader.new(File.join(@parent_dir, subfolder)).upload!
       end
+    end
+
+    private
+
+    def subfolders
+      Dir.chdir(@parent_dir) do
+        Dir.glob("*/") || []
+      end
+    end
+
+    def logger
+      FlickrUploader.logger
     end
 
   end

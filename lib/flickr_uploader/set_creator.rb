@@ -93,16 +93,7 @@ module FlickrUploader
     end
 
     def logger
-      @logger ||= create_logger
-    end
-
-    def create_logger
-      logger = Logger.new(STDOUT)
-      logger.level = Logger::INFO
-      logger.formatter = proc do |severity, datetime, progname, msg|
-        "[#{severity}][#{datetime.strftime('%H:%M:%S')}] #{msg}\n"
-      end
-      logger
+      FlickrUploader.logger
     end
 
     def progressbar(size)

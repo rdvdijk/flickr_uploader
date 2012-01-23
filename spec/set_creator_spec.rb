@@ -19,7 +19,7 @@ describe FlickrUploader::SetCreator do
     Flickr::Photosets::Photoset.stub(:new).and_return(@photoset)
 
     @log_stream = StringIO.new
-    FlickrUploader::SetCreator.any_instance.stub(:logger).and_return(Logger.new(@log_stream))
+    FlickrUploader.stub(:logger).and_return(Logger.new(@log_stream))
 
     File.stub(:size).and_return(1024)
     ProgressBar.stub(:new).and_return(double("bar", :bar_mark= => nil, :inc => nil, :finish => nil, :format_arguments= => nil))

@@ -8,6 +8,9 @@ describe FlickrUploader::MultiUploader do
     @uploader = double(:upload! => nil)
     FlickrUploader::Uploader.stub(:new).and_return(@uploader)
 
+    @log_stream = StringIO.new
+    FlickrUploader.stub(:logger).and_return(Logger.new(@log_stream))
+
     # Fake a parent older which contains folders with photos
     @parent_dir = double(:to_path => base_folder_path)
     Dir.stub(:chdir).and_yield
@@ -22,7 +25,7 @@ describe FlickrUploader::MultiUploader do
     let (:subfolders) { [ "folder1", "folder2" ] }
 
     before do
-      Dir.stub(:glob).and_yield(subfolders[0]).and_yield(subfolders[1])
+      Dir.stub(:glob).and_return(subfolders)
     end
 
     it "should create new sets for every subfolder" do
@@ -34,6 +37,23 @@ describe FlickrUploader::MultiUploader do
     it "should create new sets for the exact folders paths" do
       FlickrUploader::Uploader.should_receive(:new).with("/fake/path/parent_folder/folder1")
       FlickrUploader::Uploader.should_receive(:new).with("/fake/path/parent_folder/folder2")
+
+      subject.upload!
+    end
+
+  end
+
+  context "sorted subfolders" do
+
+    let (:subfolders) { [ "folder2", "folder1" ] }
+
+    before do
+      Dir.stub(:glob).and_return(subfolders)
+    end
+
+    it "should create sets in alphabetic order" do
+      FlickrUploader::Uploader.should_receive(:new).ordered.with("/fake/path/parent_folder/folder1")
+      FlickrUploader::Uploader.should_receive(:new).ordered.with("/fake/path/parent_folder/folder2")
 
       subject.upload!
     end
