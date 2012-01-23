@@ -12,7 +12,7 @@ module FlickrUploader
     # Loop over all JPG files and upload them to a set.
     def upload_files(file_paths)
       logger.info "Starting upload of #{file_paths.size} photos to photoset '#{@set_name}'."
-      progressbar = progressbar(file_paths.size)
+      @progressbar = progressbar(file_paths.size)
 
       file_paths.each do |file_path|
         filename = File.basename(file_path)
@@ -23,10 +23,10 @@ module FlickrUploader
         else
           logger.info "Skipping '#{filename}', already uploaded! #(photo_id = #{photos_by_name(filename).map(&:id).join(' ')})"
         end
-        progressbar.inc
+        @progressbar.inc
       end
 
-      progressbar.finish
+      @progressbar.finish
       logger.info "Done uploading #{file_paths.size} photos to photoset '#{@set_name}'."
     end
 
@@ -49,7 +49,9 @@ module FlickrUploader
       start = Time.now.to_f
       yield
       finish = Time.now.to_f
-      logger.debug "Speed: #{((size / (finish - start)) / 1024.0).round(1)}KiB/s"
+      speed_kibs = ((size / (finish - start)) / 1024.0).round(1)
+      @progressbar.speed = speed_kibs
+      logger.debug "Speed: #{speed_kibs}KiB/s"
     end
 
     def initialize_uploader

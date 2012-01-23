@@ -54,8 +54,6 @@ Every subfolder will be uploaded as if called with the single folder upload meth
 Feel free to fork this project on [GitHub](http://github.com/rdvdijk/flickr_uploader) to add any
 improvements.
 
-(Something that's coming up is logging the speed of the upload.)
-
 ## License
 
 Released under the MIT License.
