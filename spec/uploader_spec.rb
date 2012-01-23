@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'helpers'
-require 'tmpdir'
 
 RSpec.configure do |c|
   c.include Helpers
