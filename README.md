@@ -40,6 +40,15 @@ this case: `folder`).
 If there are more than 500 photos in the folder, separate photosets are created on Flickr, to
 accomodate Flickr's 500 photos per photoset limit.
 
+## Uploading subfolders
+
+If you have a large collection of photos organized in subfolders, you can upload all direct
+subfolders of a parent folder using multi-upload:
+
+    $ flickr-uploader multi-upload /path/to/your/parent/folder
+
+Every subfolder will be uploaded as if called with the single folder upload method described above.
+
 ## Improvements
 
 Feel free to fork this project on [GitHub](http://github.com/rdvdijk/flickr_uploader) to add any
