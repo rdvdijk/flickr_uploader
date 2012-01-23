@@ -30,9 +30,10 @@ module Helpers
     photos
   end
 
-  def fake_finding_files(list)
+  def fake_finding_files(filenames, filepaths)
     # puts "stubbing glob with #{list.size} files: #{list}"
-    Dir.stub(:glob).and_return(list)
+    Dir.stub(:glob).and_return(filenames)
+    Dir.stub(:chdir).and_yield
   end
 
 end

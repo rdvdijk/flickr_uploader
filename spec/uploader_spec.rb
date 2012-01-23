@@ -8,8 +8,7 @@ end
 
 describe FlickrUploader::Uploader do
 
-  let(:temp_dir) { Dir.mktmpdir }
-  let(:folder_path) { File.join(temp_dir, "example_photoset") }
+  let (:folder_path) { "/fake/path/example_photoset" }
 
   before do
     # collaborators:
@@ -17,11 +16,11 @@ describe FlickrUploader::Uploader do
     FlickrUploader::SetCreator.stub(:new).and_return(@set_creator)
 
     # Fake a source folder for upload:
-    Dir.mkdir(folder_path)
+    @photo_dir = double(:to_path => folder_path)
   end
 
   subject do
-    FlickrUploader::Uploader.new(folder_path)
+    FlickrUploader::Uploader.new(@photo_dir)
   end
 
   context "creating one set" do
@@ -29,7 +28,7 @@ describe FlickrUploader::Uploader do
     let (:file_paths) { file_paths_list(filenames) }
 
     before do
-      fake_finding_files(filenames)
+      fake_finding_files(filenames, file_paths)
     end
 
     it "should create one set if uploading 500 photos or less" do
@@ -58,7 +57,7 @@ describe FlickrUploader::Uploader do
     let (:file_paths) { file_paths_list(filenames) }
 
     before do
-      fake_finding_files(filenames)
+      fake_finding_files(filenames, file_paths)
     end
 
     it "should create multiple sets if uploading more than 500 photos" do
@@ -99,7 +98,7 @@ describe FlickrUploader::Uploader do
     let (:file_paths) { file_paths_list(filenames) }
 
     before do
-      fake_finding_files(filenames)
+      fake_finding_files(filenames, file_paths)
     end
 
     it "it should upload the files in alphabetic order" do
