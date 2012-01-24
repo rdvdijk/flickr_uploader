@@ -1,12 +1,13 @@
 module FlickrUploader
   class MultiUploader
 
-    def initialize(parent_dir)
+    def initialize(parent_dir, options = {})
       @parent_dir = parent_dir
+      @reverse = options[:reverse] == true
     end
 
     def upload!
-      subfolders.sort.each do |subfolder|
+      subfolders.each do |subfolder|
         logger.info("Uploading subfolder '#{subfolder}'")
         Uploader.new(File.join(@parent_dir, subfolder)).upload!
       end
@@ -15,9 +16,11 @@ module FlickrUploader
     private
 
     def subfolders
-      Dir.chdir(@parent_dir) do
+      folders = Dir.chdir(@parent_dir) do
         Dir.glob("*/") || []
       end
+
+      folders.sort { |a,b| (a <=> b) * (@reverse ? -1 : 1) }
     end
 
     def logger

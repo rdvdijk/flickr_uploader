@@ -60,6 +60,27 @@ describe FlickrUploader::MultiUploader do
 
   end
 
+  context "reversed sorting of subfolders" do
+
+    subject do
+      FlickrUploader::MultiUploader.new(@parent_dir, { :reverse => true })
+    end
+
+    let (:subfolders) { [ "folder1", "folder2" ] }
+
+    before do
+      Dir.stub(:glob).and_return(subfolders)
+    end
+
+    it "should create sets in alphabetic order" do
+      FlickrUploader::Uploader.should_receive(:new).ordered.with("/fake/path/parent_folder/folder2")
+      FlickrUploader::Uploader.should_receive(:new).ordered.with("/fake/path/parent_folder/folder1")
+
+      subject.upload!
+    end
+
+  end
+
   context "not fail if there are no subfolders" do
 
     let (:subfolders) { [] }

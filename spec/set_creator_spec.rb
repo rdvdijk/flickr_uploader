@@ -1,9 +1,5 @@
 require 'spec_helper'
-require 'helpers'
 
-RSpec.configure do |c|
-  c.include Helpers
-end
 
 describe FlickrUploader::SetCreator do
 

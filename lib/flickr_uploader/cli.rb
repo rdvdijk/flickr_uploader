@@ -17,9 +17,10 @@ module FlickrUploader
 
     desc "multi-upload [PATH]", "Upload all subfolders of a folder to Flickr."
     method_option :verbose, :type => :boolean, :aliases => "-v", :desc => "Show more logging."
+    method_option :reverse, :type => :boolean, :aliases => "-r", :desc => "Upload subfolders in reverse order."
     def multi_upload(path)
       handle_options(path, options)
-      MultiUploader.new(path).upload!
+      MultiUploader.new(path, uploader_options(options)).upload!
     end
 
     private
@@ -27,6 +28,10 @@ module FlickrUploader
     def handle_options(path, options)
       folder?(path)
       verbose_logger if options[:verbose]
+    end
+
+    def uploader_options(options)
+      { :reverse => (options[:reverse] == true) }
     end
 
     def folder?(path)

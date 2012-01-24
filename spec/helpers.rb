@@ -36,4 +36,18 @@ module Helpers
     Dir.stub(:chdir).and_yield
   end
 
+  # Borrowed from wycats's Thor spec_helper.rb:
+  def capture(stream)
+    begin
+      stream = stream.to_s
+      eval "$#{stream} = StringIO.new"
+      yield
+      result = eval("$#{stream}").string
+    ensure
+      eval("$#{stream} = #{stream.upcase}")
+    end
+
+    result
+  end
+
 end
