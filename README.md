@@ -54,6 +54,21 @@ Every subfolder will be uploaded as if called with the single folder upload meth
 Feel free to fork this project on [GitHub](http://github.com/rdvdijk/flickr_uploader) to add any
 improvements.
 
+## TODO
+
+### Bundle the API keys
+
+Future versions will have actual Flickr App keys bundled with it.
+
+Maybe obfuscate the keys a little bit:
+
+- http://stackoverflow.com/questions/649252/flickr-api-key-storage
+- https://discussions.apple.com/message/7247830?messageID=7247830#7247830?messageID=7247830
+
+### Use `flickraw`
+
+Use the [`flickraw`](https://github.com/hanklords/flickraw) library instead of [`flickr_fu`](https://github.com/commonthread/flickr_fu).
+
 ## License
 
 Released under the MIT License.
