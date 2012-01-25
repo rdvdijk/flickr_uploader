@@ -58,16 +58,18 @@ improvements.
 
 ### Bundle the API keys
 
-Future versions will have actual Flickr App keys bundled with it.
+Future versions might have actual Flickr App keys bundled with it.
 
 Maybe obfuscate the keys a little bit:
 
 - http://stackoverflow.com/questions/649252/flickr-api-key-storage
 - https://discussions.apple.com/message/7247830?messageID=7247830#7247830?messageID=7247830
 
-### Use `flickraw`
+### Use `flickraw`?
 
-Use the [`flickraw`](https://github.com/hanklords/flickraw) library instead of [`flickr_fu`](https://github.com/commonthread/flickr_fu).
+~~Use the [`flickraw`](https://github.com/hanklords/flickraw) library instead of [`flickr_fu`](https://github.com/commonthread/flickr_fu).~~
+
+I tried the `flickraw` gem, but it feels a bit messier than `flickr_fu`.
 
 ## License
 
