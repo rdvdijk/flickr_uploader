@@ -71,6 +71,16 @@ Maybe obfuscate the keys a little bit:
 
 I tried the `flickraw` gem, but it feels a bit messier than `flickr_fu`.
 
+### Error handling
+
+Some rudimentary error handling is needed to handle HTTP upload errors that happened during some
+longer test runs.
+
+Example errors to handle:
+
+- net/protocol.rb:141:in `read_nonblock': end of file reached (EOFError)
+- net/http.rb:762:in `initialize': Connection timed out - connect(2) (Errno::ETIMEDOUT)
+
 ## License
 
 Released under the MIT License.
