@@ -38,7 +38,7 @@ module FlickrUploader
         result = @uploader.upload(file_path)
 
         photo_id = result.photoid.to_s
-        logger.debug "Success! (photo_id = #{photo_id}) .. "
+        logger.debug "Success! (photo_id = #{photo_id})"
 
         # add photo to set
         add_to_set(@set_name, photo_id)
