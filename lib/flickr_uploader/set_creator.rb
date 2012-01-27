@@ -3,6 +3,7 @@ require 'progressbar'
 module FlickrUploader
   class SetCreator
     include Configuration
+    include RescueRetry
 
     def initialize(set_name)
       @set_name = set_name
@@ -35,13 +36,15 @@ module FlickrUploader
     def upload_file(file_path)
       # upload photo
       log_speed(File.size(file_path)) do
-        result = @uploader.upload(file_path)
+        rescue_retry(times: 20, sleep: 2.5) do
+          result = @uploader.upload(file_path)
 
-        photo_id = result.photoid.to_s
-        logger.debug "Success! (photo_id = #{photo_id})"
+          photo_id = result.photoid.to_s
+          logger.debug "Success! (photo_id = #{photo_id})"
 
-        # add photo to set
-        add_to_set(@set_name, photo_id)
+          # add photo to set
+          add_to_set(@set_name, photo_id)
+        end
       end
     end
 
