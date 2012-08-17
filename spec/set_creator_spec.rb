@@ -24,6 +24,7 @@ describe FlickrUploader::SetCreator do
   let(:folder_path) { File.join("/some/path", "example_photoset") }
 
   subject do
+    FlickrUploader::SetCreator.any_instance.stub(:configuration_path).and_return(File.expand_path(File.join(File.dirname(__FILE__), "./example_configuration.yml")))
     FlickrUploader::SetCreator.new("example_photoset")
   end
 

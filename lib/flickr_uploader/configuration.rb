@@ -12,7 +12,7 @@ module FlickrUploader
         puts 'token_cache: "/Users/jane/.flickr-uploader/token_cache.yml"'
         puts
 
-        raise "Missing configuration"
+        raise "Missing configuration: #{configuration_path}"
       end
     end
 
